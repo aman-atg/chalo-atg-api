@@ -18,12 +18,14 @@ const RouteSchema = mongoose.Schema({
   direction: {
     type: String,
     enum: ["UP", "DOWN"],
+    default: "UP",
     required: true,
   },
   status: {
     type: String,
     enum: ["ACTIVE", "INACTIVE"],
     default: "ACTIVE",
+    required: true,
   },
   stops: [
     {
@@ -42,10 +44,10 @@ const RouteSchema = mongoose.Schema({
 });
 
 RouteSchema.pre("save", async function (next) {
-  console.log("saving post");
+  console.log("saving route");
   const { _id, author } = this;
   if (!_id) {
-    return next({ statusCode: 400, message: "Error in saving your post." });
+    return next({ statusCode: 400, message: "Error in saving your route." });
   }
   User.findByIdAndUpdate(author, {
     $addToSet: { routes: _id },
